@@ -78,7 +78,14 @@ export default class AI {
     getSubjectData(subject) {
         let variants = this.findSubjectVariants(subject);
 
-        variants.forEach(variant => variants = Array.from(new Set(variants.concat(this.findSubjectVariants(variant)))));
+        let count;
+        let loopLimit = 10;
+        do {
+            loopLimit--;
+            let oldVariantsCount = variants.length;
+            variants.forEach(variant => variants = Array.from(new Set(variants.concat(this.findSubjectVariants(variant)))));
+            count = variants.length - oldVariantsCount;
+        } while (count > 0 && loopLimit > 0);
 
         const objectsList = variants.map(variant => this.data[variant] || null).filter(object => object);
 

@@ -130,9 +130,18 @@ function () {
       var _this5 = this;
 
       var variants = this.findSubjectVariants(subject);
-      variants.forEach(function (variant) {
-        return variants = Array.from(new Set(variants.concat(_this5.findSubjectVariants(variant))));
-      });
+      var count;
+      var loopLimit = 10;
+
+      do {
+        loopLimit--;
+        var oldVariantsCount = variants.length;
+        variants.forEach(function (variant) {
+          return variants = Array.from(new Set(variants.concat(_this5.findSubjectVariants(variant))));
+        });
+        count = variants.length - oldVariantsCount;
+      } while (count > 0 && loopLimit > 0);
+
       var objectsList = variants.map(function (variant) {
         return _this5.data[variant] || null;
       }).filter(function (object) {
