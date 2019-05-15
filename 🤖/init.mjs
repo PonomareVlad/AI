@@ -56,11 +56,18 @@ export default class AI {
     }
 
     statementWorker(queryData) {
-        return 'Утверждение'
+        const statementParts = queryData.split(queryData.operator);
+        const subjects = Object.keys(this.data.dictionary).filter(subject => statementParts[0].includes(subject));
+        if (!subjects) {
+            if (!this.data.rawStatements) this.data.rawStatements = {};
+            this.data.rawStatements[statementParts[0].trim()] = statementParts[1].trim();
+            return 'Утверждение зафиксировано';
+        }
+        return 'Утверждение относиться к следующим предметам: ' + subjects.map(subject => this.data.dictionary[subject]).join(', ');
     }
 
     otherWorker(queryData) {
-        return 'Допустим'
+        return 'Допустим';
     }
 
 }

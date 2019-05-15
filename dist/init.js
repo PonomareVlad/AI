@@ -118,7 +118,22 @@ var AI =
         }, {
             key: "statementWorker",
             value: function statementWorker(queryData) {
-                return 'Утверждение';
+                var _this4 = this;
+
+                var statementParts = queryData.split(queryData.operator);
+                var subjects = Object.keys(this.data.dictionary).filter(function (subject) {
+                    return statementParts[0].includes(subject);
+                });
+
+                if (!subjects) {
+                    if (!this.data.rawStatements) this.data.rawStatements = {};
+                    this.data.rawStatements[statementParts[0].trim()] = statementParts[1].trim();
+                    return 'Утверждение зафиксировано';
+                }
+
+                return 'Утверждение относиться к следующим предметам: ' + subjects.map(function (subject) {
+                    return _this4.data.dictionary[subject];
+                }).join(', ');
             }
         }, {
             key: "otherWorker",
