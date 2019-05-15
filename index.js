@@ -22,7 +22,7 @@ app.post('*', (req, res) => {
     let response = false;
 
     try {
-        if (req.body.message.text === '/data') response = JSON.stringify(Bot.data);
+        if (req.body.message.text === '/data') response = '<pre>' + JSON.stringify(Bot.data, null, 2) + '</pre>';
         else response = Bot.query(req.body.message.text);
     } catch (e) {
         response = 'У меня произошла ошибка: ' + JSON.stringify(e);
@@ -58,7 +58,7 @@ function setWebHook() {
 
 function sendMessage(chatId, message) {
 
-    let targetUrl = apiUrl + 'sendMessage?chat_id=' + encodeURI(chatId) + '&text=' + encodeURI(message);
+    let targetUrl = apiUrl + 'sendMessage?chat_id=' + encodeURI(chatId) + '&parse_mode=HTML&text=' + encodeURI(message);
 
     return axios.get(targetUrl)
         .then(response => {
