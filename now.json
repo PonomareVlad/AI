@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "name": "AI",
+  "scope": "ponomarevlad",
+  "alias": "bot.ponomarevlad.ru",
+  "builds": [
+    {
+      "src": "*.js",
+      "use": "@now/node"
+    }
+  ],
+  "env": {
+    "TELEGRAM_BOT_TOKEN": "@telegram_bot_token"
+  }
+}

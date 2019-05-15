@@ -1,0 +1,23 @@
+{
+  "name": "ai",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@babel/polyfill": "^7.4.4",
+    "axios": "^0.18.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "babel-cli": "^6.26.0"
+  },
+  "scripts": {
+    "build": "./node_modules/.bin/babel ./🤖 -d ./dist"
+  },
+  "author": "",
+  "license": "ISC"
+}
