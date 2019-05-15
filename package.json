@@ -18,7 +18,7 @@
     "@babel/preset-env": "latest"
   },
   "scripts": {
-    "now-build": "babel ./🤖 -d ./dist"
+    "now-build": "./node_modules/.bin/babel ./🤖 -d ./dist"
   },
   "author": "PonomareVlad",
   "license": "ISC",
