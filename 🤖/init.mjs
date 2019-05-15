@@ -59,12 +59,13 @@ export default class AI {
     statementWorker(queryData) {
         const statementParts = queryData.text.trimDot().split(queryData.operator.toLowerCase());
         const subjects = this.findSubjects(statementParts[0]);
-        if (!subjects.length) {
-            if (!this.data.rawStatements) this.data.rawStatements = {};
-            this.data.rawStatements[statementParts[0].trim()] = statementParts[1].trim();
-            return 'Утверждение зафиксировано';
-        }
-        return 'Утверждение относиться к следующим предметам: ' + subjects.map(subject => this.getSubjectData(subject)).join(', ');
+
+        if (!this.data.rawStatements) this.data.rawStatements = {};
+        this.data.rawStatements[statementParts[0].trim()] = statementParts[1].trim();
+
+        if (subjects.length) return 'Утверждение относиться к следующим предметам: ' + subjects.map(subject => this.getSubjectData(subject)).join(', ');
+        else return 'Утверждение зафиксировано';
+
     }
 
     findSubjects(text) {

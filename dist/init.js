@@ -106,16 +106,11 @@ function () {
 
       var statementParts = queryData.text.trimDot().split(queryData.operator.toLowerCase());
       var subjects = this.findSubjects(statementParts[0]);
-
-      if (!subjects.length) {
-        if (!this.data.rawStatements) this.data.rawStatements = {};
-        this.data.rawStatements[statementParts[0].trim()] = statementParts[1].trim();
-        return 'Утверждение зафиксировано';
-      }
-
-      return 'Утверждение относиться к следующим предметам: ' + subjects.map(function (subject) {
+      if (!this.data.rawStatements) this.data.rawStatements = {};
+      this.data.rawStatements[statementParts[0].trim()] = statementParts[1].trim();
+      if (subjects.length) return 'Утверждение относиться к следующим предметам: ' + subjects.map(function (subject) {
         return _this4.getSubjectData(subject);
-      }).join(', ');
+      }).join(', ');else return 'Утверждение зафиксировано';
     }
   }, {
     key: "findSubjects",
