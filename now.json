@@ -3,6 +3,9 @@
   "name": "AI",
   "scope": "ponomarevlad",
   "alias": "bot.ponomarevlad.ru",
+  "regions": [
+    "bru1"
+  ],
   "builds": [
     {
       "src": "*.js",
