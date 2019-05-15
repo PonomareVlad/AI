@@ -12,7 +12,7 @@ export default class AI {
 
         const queryParts = text.replace(/(\.+|\:|\!|\?)(\"*|\'*|\)*|}*|]*)(\s|\n|\r|\r\n)/gm, "$1$2|").split("|");
 
-        const queriesData = queryParts.map(query => this.analyzeQuery(query));
+        const queriesData = queryParts.map(query => this.analyzeQuery(query.toLowerCase()));
 
         const response = queriesData.map(data => this.queryTypes[data.type].call(this, data));
 
@@ -50,14 +50,14 @@ export default class AI {
     }
 
     questionWorker(queryData) {
-        const subjects = Object.keys(this.data.dictionary).filter(subject => queryData.text.includes(subject));
+        const subjects = Object.keys(this.data.dictionary).filter(subject => queryData.text.includes(subject.toLowerCase()));
         if (!subjects) return 'В указанном вопросе не удалось найти известные предметы';
         return 'В указанном вопросе обнаружены следующие предметы: ' + subjects.map(subject => this.data.dictionary[subject]).join(', ');
     }
 
     statementWorker(queryData) {
-        const statementParts = queryData.text.split(queryData.operator);
-        const subjects = Object.keys(this.data.dictionary).filter(subject => statementParts[0].includes(subject));
+        const statementParts = queryData.text.split(queryData.operator.toLowerCase());
+        const subjects = Object.keys(this.data.dictionary).filter(subject => statementParts[0].includes(subject.toLowerCase()));
         if (!subjects) {
             if (!this.data.rawStatements) this.data.rawStatements = {};
             this.data.rawStatements[statementParts[0].trim()] = statementParts[1].trim();

@@ -59,7 +59,7 @@ var AI =
 
                 var queryParts = text.replace(/(\.+|\:|\!|\?)(\"*|\'*|\)*|}*|]*)(\s|\n|\r|\r\n)/gm, "$1$2|").split("|");
                 var queriesData = queryParts.map(function (query) {
-                    return _this.analyzeQuery(query);
+                    return _this.analyzeQuery(query.toLowerCase());
                 });
                 var response = queriesData.map(function (data) {
                     return _this.queryTypes[data.type].call(_this, data);
@@ -108,7 +108,7 @@ var AI =
                 var _this3 = this;
 
                 var subjects = Object.keys(this.data.dictionary).filter(function (subject) {
-                    return queryData.text.includes(subject);
+                    return queryData.text.includes(subject.toLowerCase());
                 });
                 if (!subjects) return 'В указанном вопросе не удалось найти известные предметы';
                 return 'В указанном вопросе обнаружены следующие предметы: ' + subjects.map(function (subject) {
@@ -120,9 +120,9 @@ var AI =
             value: function statementWorker(queryData) {
                 var _this4 = this;
 
-                var statementParts = queryData.text.split(queryData.operator);
+                var statementParts = queryData.text.split(queryData.operator.toLowerCase());
                 var subjects = Object.keys(this.data.dictionary).filter(function (subject) {
-                    return statementParts[0].includes(subject);
+                    return statementParts[0].includes(subject.toLowerCase());
                 });
 
                 if (!subjects) {
