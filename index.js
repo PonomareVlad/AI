@@ -22,7 +22,8 @@ app.post('*', (req, res) => {
     let response = false;
 
     try {
-        response = Bot.query(req.body.message.text);
+        if (req.body.message.text === '/data') response = JSON.stringify(Bot.data);
+        else response = Bot.query(req.body.message.text);
     } catch (e) {
         response = 'У меня произошла ошибка: ' + JSON.stringify(e);
     }
