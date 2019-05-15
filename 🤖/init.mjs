@@ -56,7 +56,7 @@ export default class AI {
     }
 
     statementWorker(queryData) {
-        const statementParts = queryData.split(queryData.operator);
+        const statementParts = queryData.text.split(queryData.operator);
         const subjects = Object.keys(this.data.dictionary).filter(subject => statementParts[0].includes(subject));
         if (!subjects) {
             if (!this.data.rawStatements) this.data.rawStatements = {};

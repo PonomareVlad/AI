@@ -120,7 +120,7 @@ var AI =
             value: function statementWorker(queryData) {
                 var _this4 = this;
 
-                var statementParts = queryData.split(queryData.operator);
+                var statementParts = queryData.text.split(queryData.operator);
                 var subjects = Object.keys(this.data.dictionary).filter(function (subject) {
                     return statementParts[0].includes(subject);
                 });

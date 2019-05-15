@@ -19,7 +19,15 @@ app.post('*', (req, res) => {
         return res.status(200).send({error: 'no JSON object in the request'})
     }
 
-    sendMessage(req.body.message.chat.id, Bot.query(req.body.message.text)).then(() => {
+    let response = false;
+
+    try {
+        response = Bot.query(req.body.message.text);
+    } catch (e) {
+        response = 'У меня произошла ошибка: ' + JSON.stringify(e);
+    }
+
+    sendMessage(req.body.message.chat.id, response).then(() => {
         res.set('Content-Type', 'application/json');
         res.status(200).send('true');
     })
