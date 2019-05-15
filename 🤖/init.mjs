@@ -1,4 +1,5 @@
-import Data from './data';
+import './utils';
+import Data, {DataObject} from './data';
 
 export default class AI {
     constructor() {
@@ -16,7 +17,7 @@ export default class AI {
 
         const response = queriesData.map(data => this.queryTypes[data.type].call(this, data));
 
-        return response ? response.join(' ') : 'Мне не удалось понять запрос';
+        return response ? response.map(responsePart => responsePart.capitalize()).join('. ') : 'Мне не удалось понять запрос';
 
     }
 
@@ -50,20 +51,45 @@ export default class AI {
     }
 
     questionWorker(queryData) {
-        const subjects = Object.keys(this.data.dictionary).filter(subject => queryData.text.includes(subject.toLowerCase()));
-        if (!subjects) return 'В указанном вопросе не удалось найти известные предметы';
-        return 'В указанном вопросе обнаружены следующие предметы: ' + subjects.map(subject => this.data.dictionary[subject]).join(', ');
+        const subjects = this.findSubjects(queryData.text);
+        if (!subjects.length) return 'В указанном вопросе не удалось найти известные предметы';
+        return 'В указанном вопросе обнаружены следующие предметы: ' + subjects.map(subject => this.getSubjectData(subject)).join(', ');
     }
 
     statementWorker(queryData) {
-        const statementParts = queryData.text.split(queryData.operator.toLowerCase());
-        const subjects = Object.keys(this.data.dictionary).filter(subject => statementParts[0].includes(subject.toLowerCase()));
-        if (!subjects) {
+        const statementParts = queryData.text.trimDot().split(queryData.operator.toLowerCase());
+        const subjects = this.findSubjects(statementParts[0]);
+        if (!subjects.length) {
             if (!this.data.rawStatements) this.data.rawStatements = {};
             this.data.rawStatements[statementParts[0].trim()] = statementParts[1].trim();
             return 'Утверждение зафиксировано';
         }
-        return 'Утверждение относиться к следующим предметам: ' + subjects.map(subject => this.data.dictionary[subject]).join(', ');
+        return 'Утверждение относиться к следующим предметам: ' + subjects.map(subject => this.getSubjectData(subject)).join(', ');
+    }
+
+    findSubjects(text) {
+        let foundSubjects = [];
+        foundSubjects = Array.from(new Set(foundSubjects.concat(Object.keys(this.data.dictionary).filter(subject => text.includes(subject.toLowerCase())))));
+        foundSubjects = Array.from(new Set(foundSubjects.concat(Object.keys(this.data.rawStatements).filter(subject => text.includes(subject.toLowerCase())))));
+        return foundSubjects;
+    }
+
+    getSubjectData(subject) {
+        let variants = this.findSubjectVariants(subject);
+
+        variants.forEach(variant => variants = Array.from(new Set(variants.concat(this.findSubjectVariants(variant)))));
+
+        const objectsList = variants.map(variant => this.data[variant] || null).filter(object => object);
+
+        return objectsList.length ? objectsList[0] : new DataObject({notion: subject});
+
+    }
+
+    findSubjectVariants(subject) {
+        let variants = [subject];
+        if (this.data.dictionary[subject]) variants.push(this.data.dictionary[subject]);
+        if (this.data.rawStatements[subject]) variants.push(this.data.rawStatements[subject]);
+        return variants;
     }
 
     otherWorker(queryData) {
