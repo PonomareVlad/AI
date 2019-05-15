@@ -23,20 +23,25 @@ function () {
   function AI() {
     _classCallCheck(this, AI);
 
-    this['🤖'] = {
-      name: 'ИИ',
-      entity: 'Искуственный интелект'
-    };
-    this.data = new _data["default"]();
-    this.data.attachObject('я', this['🤖']);
-    this.queryTypes = {
-      question: this.questionWorker,
-      statement: this.statementWorker,
-      other: this.otherWorker
-    };
+    this.init();
   }
 
   _createClass(AI, [{
+    key: "init",
+    value: function init() {
+      this['🤖'] = {
+        name: 'ИИ',
+        entity: 'Искуственный интелект'
+      };
+      this.data = new _data["default"]();
+      this.data.attachObject('я', this['🤖']);
+      this.queryTypes = {
+        question: this.questionWorker,
+        statement: this.statementWorker,
+        other: this.otherWorker
+      };
+    }
+  }, {
     key: "query",
     value: function query(text) {
       var _this = this;

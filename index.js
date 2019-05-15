@@ -22,8 +22,18 @@ app.post('*', (req, res) => {
     let response = false;
 
     try {
-        if (req.body.message.text === '/data') response = '<pre>' + JSON.stringify(Bot.data, null, 2) + '</pre>';
-        else response = Bot.query(req.body.message.text);
+        switch (req.body.message.text) {
+            case '/data':
+                response = '<pre>' + JSON.stringify(Bot.data, null, 2) + '</pre>';
+                break;
+            case '/reset':
+                Bot.init();
+                response = 'Память очищена';
+                break;
+            default:
+                response = Bot.query(req.body.message.text);
+                break;
+        }
     } catch (e) {
         response = 'У меня произошла ошибка: ' + JSON.stringify(e);
     }

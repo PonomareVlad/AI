@@ -3,6 +3,10 @@ import Data, {DataObject} from './data';
 
 export default class AI {
     constructor() {
+        this.init();
+    }
+
+    init() {
         this['🤖'] = {name: 'ИИ', entity: 'Искуственный интелект'};
         this.data = new Data();
         this.data.attachObject('я', this['🤖']);
