@@ -38,6 +38,9 @@ module.exports = async (req, res) => {
                 Bot.init();
                 response = 'Память очищена';
                 break;
+            case '/host':
+                response = req.headers.host;
+                break;
             default:
                 response = Bot.query(message);
                 break;
