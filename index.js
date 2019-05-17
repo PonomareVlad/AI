@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
     let data, message, chatId;
 
     try {
-        if (!webHookInstalled && req.headers.host) await setWebHook(req.headers.host);
+        if (!webHookInstalled && req.headers.host && req.headers.host !== 'localhost') await setWebHook(req.headers.host);
         data = await json(req);
         message = data.message.text;
         chatId = data.message.chat.id;
