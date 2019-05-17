@@ -4,18 +4,20 @@
   "description": "AI",
   "main": "index.js",
   "dependencies": {
-    "@babel/polyfill": "latest",
-    "axios": "^0.18.0",
-    "body-parser": "^1.19.0",
-    "express": "^4.16.4"
+    "micro": "^9.3.4",
+    "node-fetch": "^2.6.0",
+    "random-emoji": "^1.0.2"
   },
   "devDependencies": {
     "@babel/cli": "latest",
     "@babel/core": "latest",
-    "@babel/preset-env": "latest"
+    "@babel/preset-env": "latest",
+    "micro-dev": "^3.0.0"
   },
   "scripts": {
-    "build": "./node_modules/.bin/babel ./🤖 -d ./dist"
+    "build": "./node_modules/.bin/babel ./🤖 -d ./dist",
+    "start": "micro",
+    "dev": "micro-dev"
   },
   "author": "PonomareVlad",
   "license": "ISC",

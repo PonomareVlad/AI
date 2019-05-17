@@ -9,10 +9,11 @@
   "builds": [
     {
       "src": "*.js",
-      "use": "@now/node"
+      "use": "now-micro"
     }
   ],
   "env": {
+    "NODE_ENV": "production",
     "TELEGRAM_BOT_TOKEN": "@telegram_bot_token"
   }
 }

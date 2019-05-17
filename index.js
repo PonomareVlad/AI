@@ -1,28 +1,36 @@
-const axios = require('axios');
-const express = require('express');
-const bodyParser = require('body-parser');
-
+const fetch = require('node-fetch');
+const {send, json} = require('micro');
 const {default: AI} = require('./dist/init.js');
 
-const app = express();
-module.exports = app;
-
 const Bot = new AI();
-
 const apiUrl = 'https://api.telegram.org/bot' + process.env['TELEGRAM_BOT_TOKEN'] + '/';
 
-app.use(bodyParser.json());
+let webHookInstalled = false;
 
-app.post('*', (req, res) => {
+module.exports = async (req, res) => {
 
-    if (req.body == null) {
-        return res.status(200).send({error: 'no JSON object in the request'})
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+
+    let data, message, chatId;
+
+    try {
+        if (!webHookInstalled && req.headers.host) await setWebHook(req.headers.host);
+        data = await json(req);
+        message = data.message.text;
+        chatId = data.message.chat.id;
+    } catch (e) {
+        console.error(e);
+        const randomEmoji = require("random-emoji");
+        const emoji = randomEmoji.random({count: 1}).pop().character;
+        return await send(res, 200, emoji);
     }
+
+    console.debug('Incoming message: ', data);
 
     let response = false;
 
     try {
-        switch (req.body.message.text) {
+        switch (message) {
             case '/data':
                 response = '<pre>' + JSON.stringify(Bot.data, null, 2) + '</pre>';
                 break;
@@ -31,56 +39,59 @@ app.post('*', (req, res) => {
                 response = 'Память очищена';
                 break;
             default:
-                response = Bot.query(req.body.message.text);
+                response = Bot.query(message);
                 break;
         }
     } catch (e) {
-        response = 'У меня произошла ошибка: ' + JSON.stringify(e);
+        response = 'У меня произошла ошибка: <pre>' + JSON.stringify(e) + '</pre>';
     }
 
-    sendMessage(req.body.message.chat.id, response).then(() => {
-        res.set('Content-Type', 'application/json');
-        res.status(200).send('true');
-    })
+    console.debug('Response: ', chatId, response);
 
-});
+    await sendMessage(chatId, response).then(() => send(res, 200, 'true'));
 
-app.all('*', (req, res) => {
-    res.status(200).send('🤖');
-});
+};
 
-function setWebHook() {
+async function sendMessage(chatId, message) {
 
-    let targetUrl = apiUrl + 'setWebhook?url=https://bot.ponomarevlad.ru';
+    try {
 
-    return axios.get(targetUrl)
-        .then(response => {
-            console.log(response.data);
-            return true;
-        })
-        .catch(error => {
-            console.log(error);
-            return true;
-        }).then(() => {
-            return true;
-        });
+        let targetUrl = apiUrl + 'sendMessage?chat_id=' + encodeURI(chatId) + '&parse_mode=HTML&text=' + encodeURI(message);
+
+        const response = await fetch(targetUrl);
+
+        const json = await response.json();
+
+        console.debug('Message sent: ', json);
+
+    } catch (e) {
+
+        console.debug('Message sent error: ', e);
+
+    }
+
+    return true;
+
 }
 
-function sendMessage(chatId, message) {
+async function setWebHook(hostName) {
 
-    let targetUrl = apiUrl + 'sendMessage?chat_id=' + encodeURI(chatId) + '&parse_mode=HTML&text=' + encodeURI(message);
+    try {
 
-    return axios.get(targetUrl)
-        .then(response => {
-            console.log(response.data);
-            return true;
-        })
-        .catch(error => {
-            console.log(error);
-            return true;
-        }).then(() => {
-            return true;
-        });
+        let targetUrl = apiUrl + 'setWebhook?url=https://' + hostName;
+
+        const response = await fetch(targetUrl);
+
+        const json = await response.json();
+
+        console.debug('WebHook installed', hostName, json);
+
+    } catch (e) {
+
+        console.debug('WebHook not installed', hostName, e);
+
+    }
+
+    return true;
+
 }
-
-setWebHook();
