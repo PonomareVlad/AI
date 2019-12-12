@@ -1,5 +1,5 @@
-import './utils';
-import Data, {DataObject} from './data';
+import './utils.js';
+import Data, {DataObject} from './data.js';
 
 export default class AI {
     constructor() {

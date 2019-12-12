@@ -4,16 +4,19 @@
   "scope": "ponomarevlad",
   "alias": "bot.ponomarevlad.ru",
   "regions": [
-    "bru1"
+    "arn1"
   ],
   "builds": [
     {
-      "src": "*.js",
-      "use": "now-micro"
+      "src": "index.js",
+      "use": "@now/node"
     }
   ],
   "env": {
     "NODE_ENV": "production",
     "TELEGRAM_BOT_TOKEN": "@telegram_bot_token"
+  },
+  "github": {
+    "silent": true
   }
 }

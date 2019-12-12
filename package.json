@@ -2,22 +2,14 @@
   "name": "ai",
   "version": "1.0.0",
   "description": "AI",
+  "type": "module",
   "main": "index.js",
+  "engines": {
+    "node": "12.x"
+  },
   "dependencies": {
-    "micro": "^9.3.4",
     "node-fetch": "^2.6.0",
     "random-emoji": "^1.0.2"
-  },
-  "devDependencies": {
-    "@babel/cli": "latest",
-    "@babel/core": "latest",
-    "@babel/preset-env": "latest",
-    "micro-dev": "^3.0.0"
-  },
-  "scripts": {
-    "build": "./node_modules/.bin/babel ./🤖 -d ./dist",
-    "start": "micro",
-    "dev": "micro-dev"
   },
   "author": "PonomareVlad",
   "license": "ISC",

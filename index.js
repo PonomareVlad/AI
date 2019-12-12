@@ -1,28 +1,27 @@
 const fetch = require('node-fetch');
-const {send, json} = require('micro');
-const {default: AI} = require('./dist/init.js');
+const {default: AI} = require('./🤖/init.js');
 
 const Bot = new AI();
 const apiUrl = 'https://api.telegram.org/bot' + process.env['TELEGRAM_BOT_TOKEN'] + '/';
 
 let webHookInstalled = false;
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
 
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    // res.setHeader('Content-Type', 'application/json; charset=utf-8');
 
     let data, message, chatId;
 
     try {
         if (!webHookInstalled && req.headers.host && req.headers.host !== 'localhost') await setWebHook(req.headers.host);
-        data = await json(req);
-        message = data.message.text;
-        chatId = data.message.chat.id;
+        data = req.body;
+        if (data && data.message) {
+            message = data.message.text;
+            chatId = data.message.chat.id;
+        } else return await emojiResponse(res);
     } catch (e) {
         console.error(e);
-        const randomEmoji = require("random-emoji");
-        const emoji = randomEmoji.random({count: 1}).pop().character;
-        return await send(res, 200, emoji);
+        return await emojiResponse(res);
     }
 
     console.debug('Incoming message: ', data);
@@ -51,7 +50,7 @@ module.exports = async (req, res) => {
 
     console.debug('Response: ', chatId, response);
 
-    await sendMessage(chatId, response).then(() => send(res, 200, 'true'));
+    await sendMessage(chatId, response).then(() => res.status(200).send('true'));
 
 };
 
@@ -97,4 +96,10 @@ async function setWebHook(hostName) {
 
     return true;
 
+}
+
+async function emojiResponse(res) {
+    const randomEmoji = require("random-emoji");
+    const emoji = randomEmoji.random({count: 1}).pop().character;
+    return res.status(200).send(emoji);
 }
