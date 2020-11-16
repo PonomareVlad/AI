@@ -2,11 +2,7 @@
   "name": "ai",
   "version": "1.0.0",
   "description": "AI",
-  "type": "module",
   "main": "index.js",
-  "engines": {
-    "node": "12.x"
-  },
   "dependencies": {
     "node-fetch": "^2.6.0",
     "random-emoji": "^1.0.2"
