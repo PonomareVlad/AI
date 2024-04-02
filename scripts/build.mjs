@@ -13,7 +13,8 @@ const allowedEnvs = [
 await bot.init()
 
 // Exit in case of unsuitable environments
-if (!allowedEnvs.includes(VERCEL_ENV)) process.exit();
+if (!allowedEnvs.includes(VERCEL_ENV))
+    console.warn(VERCEL_ENV, "environment is not allowed") || process.exit();
 
 // Webhook URL generation
 const url = getURL({path: "api/update"});
