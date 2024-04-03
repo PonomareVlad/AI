@@ -13,7 +13,12 @@
     "start:polling": "npm run env && npm run start:local"
   },
   "dependencies": {
+    "@grammyjs/storage-free": "^2.4.2",
     "grammy": "^1.22.4",
+    "openai": "^4.32.1",
     "vercel-grammy": "^1.0.0"
+  },
+  "devDependencies": {
+    "prettier": "3.2.5"
   }
 }
