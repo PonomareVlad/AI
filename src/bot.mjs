@@ -46,6 +46,7 @@ safe.use(session({ storage, initial: () => ({}) }))
 
 // Sample handler for a simple echo bot
 safe.on('business_message', async ctx => {
+  console.log(ctx)
   if (!ctx.session.thread_id) {
     const name = [ctx.chat.title, ctx.chat.first_name, ctx.chat.last_name]
       .filter(Boolean)
